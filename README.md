@@ -1,6 +1,6 @@
-# Screenly Basic Auth Demo
+# Basic Auth Demo
 
-A static demo site showcasing [Screenly Basic Authentication](https://www.screenly.io/developers/authentication/). HTTP Basic Auth is enforced via Vercel Edge Middleware — no backend required.
+A static site demo for HTTP Basic Authentication, enforced via Vercel Edge Middleware — no backend required.
 
 ## Credentials
 
@@ -24,7 +24,3 @@ Push to GitHub and import at [vercel.com/new](https://vercel.com/new). No config
 python3 server.py
 # open http://localhost:8080
 ```
-
-## Screenly setup
-
-When adding the asset, click **+ Add Basic Auth** and enter the credentials above. The player sends the `Authorization` header automatically.
