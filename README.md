@@ -1,22 +1,30 @@
-## Basic Auth Demo
+# Screenly Basic Auth Demo
 
-A simple static two-page login demo site created to showcase how Screenly Basic Authentication works.
+A static demo site showcasing [Screenly Basic Authentication](https://www.screenly.io/developers/authentication/). HTTP Basic Auth is enforced via Vercel Edge Middleware — no backend required.
 
-This project simulates a basic login flow using plain HTML, CSS, and JavaScript. When the correct credentials are entered:
+## Credentials
 
 ```
 Username: screenly
 Password: admin
 ```
 
-The user is redirected to a success page displaying a demo dashboard layout.
+## Pages
 
-### ⚠️ Note:
-This site does not implement real authentication. It is designed for demonstration purposes only. In production, Screenly Basic Auth will handle secure authentication at the player level.
+- **`/landing.html`** — Public. Shown when not authenticated.
+- **`/`** — Protected dashboard. Shown after successful auth.
 
-### Features
-- Simple login page
-- Front-end credential validation
-- Success page with placeholder dashboard
-- Fully static site
-- No backend required
+## Deploy
+
+Push to GitHub and import at [vercel.com/new](https://vercel.com/new). No configuration needed.
+
+## Local dev
+
+```bash
+python3 server.py
+# open http://localhost:8080
+```
+
+## Screenly setup
+
+When adding the asset, click **+ Add Basic Auth** and enter the credentials above. The player sends the `Authorization` header automatically.
