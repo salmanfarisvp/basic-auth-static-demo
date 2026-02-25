@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Screenly – Login</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1a1a1a;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 380px;
+      padding: 48px 40px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      background: #0d6efd;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-mark svg {
+      width: 18px;
+      height: 18px;
+      fill: #ffffff;
+    }
+
+    .logo-name {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #0d6efd;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 28px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 7px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      color: #1a1a1a;
+      background: #fff;
+    }
+
+    input:focus {
+      border-color: #0d6efd;
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
+    }
+
+    .error-msg {
+      display: none;
+      font-size: 13px;
+      color: #dc2626;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 7px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+    }
+
+    .error-msg.visible {
+      display: block;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 11px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+      background: #0d6efd;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      margin-top: 4px;
+    }
+
+    button[type="submit"]:hover {
+      background: #0b5ed7;
+    }
+
+    button[type="submit"]:active {
+      transform: scale(0.98);
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 28px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <div class="logo">
+      <div class="logo-mark">
+        <!-- Simple screen icon -->
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="3" width="16" height="11" rx="1.5"/>
+          <rect x="7" y="15" width="6" height="1.5" rx="0.75"/>
+          <rect x="9.25" y="14" width="1.5" height="2" rx="0.75"/>
+        </svg>
+      </div>
+      <span class="logo-name">Screenly</span>
+    </div>
+
+    <h1>Sign in</h1>
+    <p class="subtitle">Basic Auth Demo – enter your credentials to continue.</p>
+
+    <form id="loginForm" novalidate>
+      <div id="errorMsg" class="error-msg" role="alert">
+        Invalid username or password
+      </div>
+
+      <div class="field">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          autocomplete="username"
+          placeholder="username"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          autocomplete="current-password"
+          placeholder="••••••••"
+          required
+        />
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <p class="footer-note">Protected by Screenly Basic Auth</p>
+  </div>
+
+  <script>
+    const VALID_USERNAME = "screenly";
+    const VALID_PASSWORD = "admin";
+
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+        errorMsg.classList.remove("visible");
+        window.location.href = "dashboard.html";
+      } else {
+        errorMsg.classList.add("visible");
+        document.getElementById("password").value = "";
+        document.getElementById("password").focus();
+      }
+    });
+  </script>
+
+</body>
+</html>
