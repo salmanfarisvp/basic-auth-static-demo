@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Screenly – Login</title>
+  <title>Screenly – Basic Auth Demo</title>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -13,214 +13,283 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #ffffff;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: #f8f9fb;
       color: #1a1a1a;
+      min-height: 100vh;
     }
 
-    .login-card {
-      width: 100%;
-      max-width: 380px;
-      padding: 48px 40px;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-    }
-
-    .logo {
+    /* ── Top nav ─────────────────────────────────────────── */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      height: 58px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 32px;
+      padding: 0 32px;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     .logo-mark {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       background: #0d6efd;
-      border-radius: 7px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
     .logo-mark svg {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       fill: #ffffff;
     }
 
-    .logo-name {
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      color: #0d6efd;
-    }
+    .logo-name      { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; color: #0d6efd; }
+    .nav-divider    { width: 1px; height: 20px; background: #e5e7eb; margin: 0 8px; }
+    .nav-label      { font-size: 14px; color: #6b7280; }
+    .nav-spacer     { flex: 1; }
 
-    h1 {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -0.4px;
-      margin-bottom: 6px;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      color: #6b7280;
-      margin-bottom: 28px;
-    }
-
-    .field {
-      margin-bottom: 16px;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
+    .auth-badge {
+      font-size: 12px;
       font-weight: 600;
-      color: #374151;
-      margin-bottom: 6px;
+      color: #16a34a;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 99px;
+      padding: 4px 12px;
     }
 
-    input {
-      width: 100%;
-      padding: 10px 14px;
-      font-size: 14px;
-      border: 1px solid #d1d5db;
-      border-radius: 7px;
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      color: #1a1a1a;
-      background: #fff;
-    }
-
-    input:focus {
-      border-color: #0d6efd;
-      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
-    }
-
-    .error-msg {
-      display: none;
-      font-size: 13px;
-      color: #dc2626;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 7px;
-      padding: 10px 14px;
-      margin-bottom: 16px;
-    }
-
-    .error-msg.visible {
-      display: block;
-    }
-
-    button[type="submit"] {
-      width: 100%;
-      padding: 11px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #ffffff;
+    /* ── Success banner ──────────────────────────────────── */
+    .success-banner {
       background: #0d6efd;
-      border: none;
-      border-radius: 7px;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      color: #ffffff;
+      text-align: center;
+      padding: 18px 24px;
+    }
+
+    .success-banner h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .success-banner p {
+      font-size: 13px;
+      opacity: 0.8;
       margin-top: 4px;
     }
 
-    button[type="submit"]:hover {
-      background: #0b5ed7;
+    /* ── Main layout ─────────────────────────────────────── */
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 24px;
     }
 
-    button[type="submit"]:active {
-      transform: scale(0.98);
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #9ca3af;
+      margin-bottom: 16px;
     }
 
-    .footer-note {
+    /* ── Metric cards ────────────────────────────────────── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .metric-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 24px 24px 20px;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+
+    .metric-value {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric-value.blue  { color: #0d6efd; }
+    .metric-value.green { color: #16a34a; }
+    .metric-value.amber { color: #d97706; }
+
+    .metric-trend { font-size: 13px; color: #6b7280; }
+    .trend-up     { color: #16a34a; font-weight: 600; }
+    .trend-warn   { color: #d97706; font-weight: 600; }
+
+    /* ── Screens table ───────────────────────────────────── */
+    .table-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    thead { background: #f9fafb; }
+
+    th {
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #9ca3af;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    td {
+      padding: 14px 20px;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td      { background: #f9fafb; }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 7px;
+      vertical-align: middle;
+    }
+
+    .status-dot.online  { background: #16a34a; }
+    .status-dot.offline { background: #ef4444; }
+    .status-dot.idle    { background: #d97706; }
+
+    /* ── Footer ──────────────────────────────────────────── */
+    footer {
       text-align: center;
       font-size: 12px;
       color: #9ca3af;
-      margin-top: 28px;
+      padding: 32px 24px;
     }
   </style>
 </head>
 <body>
 
-  <div class="login-card">
-    <div class="logo">
-      <div class="logo-mark">
-        <!-- Simple screen icon -->
-        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <rect x="2" y="3" width="16" height="11" rx="1.5"/>
-          <rect x="7" y="15" width="6" height="1.5" rx="0.75"/>
-          <rect x="9.25" y="14" width="1.5" height="2" rx="0.75"/>
-        </svg>
-      </div>
-      <span class="logo-name">Screenly</span>
+  <header>
+    <div class="logo-mark">
+      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="3" width="16" height="11" rx="1.5"/>
+        <rect x="7" y="15" width="6" height="1.5" rx="0.75"/>
+        <rect x="9.25" y="14" width="1.5" height="2" rx="0.75"/>
+      </svg>
     </div>
+    <span class="logo-name">Screenly</span>
+    <div class="nav-divider"></div>
+    <span class="nav-label">Dashboard</span>
+    <div class="nav-spacer"></div>
+    <span class="auth-badge">Authenticated</span>
+  </header>
 
-    <h1>Sign in</h1>
-    <p class="subtitle">Basic Auth Demo – enter your credentials to continue.</p>
-
-    <form id="loginForm" novalidate>
-      <div id="errorMsg" class="error-msg" role="alert">
-        Invalid username or password
-      </div>
-
-      <div class="field">
-        <label for="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          autocomplete="username"
-          placeholder="username"
-          required
-        />
-      </div>
-
-      <div class="field">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          autocomplete="current-password"
-          placeholder="••••••••"
-          required
-        />
-      </div>
-
-      <button type="submit">Login</button>
-    </form>
-
-    <p class="footer-note">Protected by Screenly Basic Auth</p>
+  <div class="success-banner">
+    <h1>Login Successful &ndash; Screenly Basic Auth Demo Page</h1>
+    <p>You have been authenticated via Screenly Basic Auth. This is a protected page.</p>
   </div>
 
-  <script>
-    const VALID_USERNAME = "screenly";
-    const VALID_PASSWORD = "admin";
+  <main>
 
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
-      e.preventDefault();
+    <p class="section-title">Overview</p>
+    <div class="metrics-grid">
 
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value;
-      const errorMsg = document.getElementById("errorMsg");
+      <div class="metric-card">
+        <p class="metric-label">Screens Online</p>
+        <p class="metric-value blue">24</p>
+        <p class="metric-trend"><span class="trend-up">&#8593; 3</span> since yesterday</p>
+      </div>
 
-      if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-        errorMsg.classList.remove("visible");
-        window.location.href = "dashboard.html";
-      } else {
-        errorMsg.classList.add("visible");
-        document.getElementById("password").value = "";
-        document.getElementById("password").focus();
-      }
-    });
-  </script>
+      <div class="metric-card">
+        <p class="metric-label">Content Played Today</p>
+        <p class="metric-value green">1,482</p>
+        <p class="metric-trend"><span class="trend-up">&#8593; 12%</span> vs last week</p>
+      </div>
+
+      <div class="metric-card">
+        <p class="metric-label">Screens Offline</p>
+        <p class="metric-value amber">2</p>
+        <p class="metric-trend"><span class="trend-warn">&#9888; Needs attention</span></p>
+      </div>
+
+    </div>
+
+    <p class="section-title">Screen Status</p>
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Screen Name</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Last Seen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Lobby Display 1</td>
+            <td>HQ &ndash; Ground Floor</td>
+            <td><span class="status-dot online"></span>Online</td>
+            <td>Just now</td>
+          </tr>
+          <tr>
+            <td>Reception Screen</td>
+            <td>HQ &ndash; Reception</td>
+            <td><span class="status-dot online"></span>Online</td>
+            <td>1 min ago</td>
+          </tr>
+          <tr>
+            <td>Cafeteria Board</td>
+            <td>HQ &ndash; Level 2</td>
+            <td><span class="status-dot idle"></span>Idle</td>
+            <td>8 min ago</td>
+          </tr>
+          <tr>
+            <td>Warehouse Screen</td>
+            <td>Warehouse A</td>
+            <td><span class="status-dot offline"></span>Offline</td>
+            <td>2 hrs ago</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <footer>
+    Screenly Basic Auth Demo &mdash; Protected via Vercel Edge Middleware
+  </footer>
 
 </body>
 </html>
