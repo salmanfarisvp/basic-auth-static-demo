@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 """
-Local dev server with HTTP Basic Auth for Screenly Basic Auth demo.
+Local dev server — mirrors the Vercel Edge Middleware logic exactly.
+
+Auth is accepted via either:
+  1. HTTP Basic Auth header  →  used by the Screenly player
+  2. screenly_demo_auth=1 cookie  →  set by the browser login form
 
 Usage:
     python3 server.py
-
-Then open: http://localhost:8080
-Credentials: screenly / admin
-
-The Screenly player sends:
-    Authorization: Basic c2NyZWVubHk6YWRtaW4=
-    (base64 of "screenly:admin")
+    open http://localhost:8080
 """
 
 import base64
@@ -18,32 +16,11 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 USERNAME = "screenly"
 PASSWORD = "admin"
+COOKIE_NAME = "screenly_demo_auth"
 
 VALID_TOKEN = "Basic " + base64.b64encode(
     f"{USERNAME}:{PASSWORD}".encode()
 ).decode()
-
-UNAUTHORIZED_HTML = b"""<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>401 Unauthorized</title>
-  <style>
-    body { font-family: system-ui, sans-serif; display: flex; align-items: center;
-           justify-content: center; min-height: 100vh; margin: 0; background: #f8f9fb; }
-    .box { text-align: center; padding: 48px; border: 1px solid #e5e7eb;
-           border-radius: 12px; background: #fff; }
-    h1   { font-size: 20px; margin-bottom: 8px; color: #1a1a1a; }
-    p    { font-size: 14px; color: #6b7280; }
-  </style>
-</head>
-<body>
-  <div class="box">
-    <h1>401 Unauthorized</h1>
-    <p>Valid Basic Auth credentials are required.</p>
-  </div>
-</body>
-</html>"""
 
 
 class BasicAuthHandler(SimpleHTTPRequestHandler):
@@ -61,30 +38,38 @@ class BasicAuthHandler(SimpleHTTPRequestHandler):
             self._send_401()
 
     def _is_authorized(self):
-        return self.headers.get("Authorization", "") == VALID_TOKEN
+        # 1. Real HTTP Basic Auth (Screenly player)
+        if self.headers.get("Authorization", "") == VALID_TOKEN:
+            return True
+        # 2. Session cookie (browser login form)
+        cookies = self.headers.get("Cookie", "")
+        if f"{COOKIE_NAME}=1" in cookies:
+            return True
+        return False
 
     def _send_401(self):
+        body = b"401 Unauthorized - use the browser form or HTTP Basic Auth"
         self.send_response(401)
         self.send_header("WWW-Authenticate", 'Basic realm="Screenly Demo"')
-        self.send_header("Content-Type", "text/html; charset=utf-8")
-        self.send_header("Content-Length", str(len(UNAUTHORIZED_HTML)))
+        self.send_header("Content-Type", "text/plain")
+        self.send_header("Content-Length", str(len(body)))
         self.end_headers()
-        self.wfile.write(UNAUTHORIZED_HTML)
+        self.wfile.write(body)
 
     def log_message(self, fmt, *args):
-        auth = self.headers.get("Authorization", "none")
-        status = "OK" if self._is_authorized() else "DENIED"
-        print(f"[{status}] {self.command} {self.path}  |  Auth: {auth[:30]}...")
+        auth = self.headers.get("Authorization", "—")
+        cookies = self.headers.get("Cookie", "—")
+        ok = self._is_authorized()
+        print(f"[{'OK' if ok else 'DENIED'}] {self.command} {self.path}")
 
 
 if __name__ == "__main__":
     port = 8080
     server = HTTPServer(("", port), BasicAuthHandler)
-    print(f"Screenly Basic Auth demo server running on http://localhost:{port}")
+    print(f"Server: http://localhost:{port}")
     print(f"Credentials: {USERNAME} / {PASSWORD}")
-    print(f"Authorization header value: {VALID_TOKEN}")
-    print("Press Ctrl+C to stop.\n")
+    print(f"Expected header: {VALID_TOKEN}\n")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print("\nServer stopped.")
+        print("\nStopped.")
